@@ -1,0 +1,8 @@
+15 x sin x sin * x cos x cos * + x * x -
+16 x sin x cos * x sin x cos * + x x + sin -
+24 x x + tan x x tan x tan * x * - * x tan x * - x tan x * -
+10 x x + sin x cos - x cos -
+4 x tan x *
+5 x tan x tan -
+23 x sin x sin - x tan x tan - x cos x cos * x cos x cos * - - -
+0
