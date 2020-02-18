@@ -1,0 +1,23 @@
+.title Element summator
+; Task1 for computer architecture subject
+; by Mark Vodyanitskiy
+.ASECT
+.=200
+mov @#2000, r2
+mov #3000, r3
+clr r0
+loop: add (r3)+, r0
+dec r2
+bne loop
+halt
+
+.ASECT
+.=2000
+5 ; number of elements
+.ASECT
+.=3000 ; array of elements for summation
+1
+2
+3
+4
+5

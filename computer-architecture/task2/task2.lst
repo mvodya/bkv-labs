@@ -1,0 +1,21 @@
+       1                                .title Fibonacci series
+       2                                ; Task2 for computer architecture subject
+       3                                ; by Mark Vodyanitskiy
+       4                                .ASECT
+       5 002000                         .=2000
+       6 002000 005000                  clr r0
+       7 002002 012700  003000          mov #data, r0
+       8                                loop:
+       9 002006 061060  000004          add (r0), 4(r0) ; add from first
+      10 002012 102407                  bvs exit ; detect overflow
+      11 002014 066060  000002  000004  add 2(r0), 4(r0) ;add from second
+      12 002022 102403                  bvs exit ; detect overflow
+      13 002024 062700  000002          add #2, r0
+      14 002030 000766                  br loop
+      15 002032 000000G                 exit: hlt
+      16                                
+      17                                .ASECT
+      18 003000                         .=3000
+      19                                data: ; start digits
+      20 003000 000001                  1
+      20 003002 000001                  1
