@@ -1,0 +1,4 @@
+This code need iconv lib!
+
+For Windows: vcpkg install libiconv
+For Linux: apt-get install libc6-dev
