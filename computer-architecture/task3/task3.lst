@@ -1,0 +1,15 @@
+       1                                .title Parrot counter
+       2                                ; Task3 for computer architecture subject
+       3                                ; by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova, Danil Maltsev
+       4                                .ASECT
+       5 002000                         .=2000
+       6 002000 005200                  s: inc r0 ; Count iterations
+       7 002002 005001                  clr r1
+       8 002004 005003                  clr r3
+       9 002006 060701                  add pc, r1
+      10 002010 060703                  add pc, r3
+      11 002012 162701  000010          sub #10, r1 ; start program
+      12 002016 062703  000020          add #20, r3 ; start for copy of program
+      13 002022 012702  000015          mov #15, r2 ; length of program (words)
+      14 002026 012123                  l: mov (r1)+, (r3)+ ; cycle for copy program
+      14 002030 077202                  sob r2, l
