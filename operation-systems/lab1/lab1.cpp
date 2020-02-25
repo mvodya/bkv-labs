@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+// Файл с разбором типов файловых систем
 #include "partstypes.h"
 
 // Файловый дескриптор
