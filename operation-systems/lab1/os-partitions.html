@@ -1,0 +1,96 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><title> Operating Systems: Partitions </title></head>
+<body bgcolor="#C0C0C0" text="#000000" link="#008000" vlink="#800000" alink="#FFFFFF">
+
+<h1>Partitions<hr></h1><p>
+
+This article is about the partitioning scheme that MS-DOS uses to keep track
+of it's partitions.  This is the standard that all PC operation systems must
+use to be allowed to share hard disk resources with other operating systems.
+</p><p>
+
+</p><hr align="Center" width="400"><br>
+
+DOS keeps track of partitions with a "Master Partition Table" that it keeps
+at offset 1BEh in the disk's boot sector.  It contains four 16 byte 
+entries, one for each partition.  Each entry is divided into ten fields that
+contain all of the information necessary to describe a partition on the
+hard drive, including: <p>
+
+</p><ul>
+<li>Whether this partition is the one that got booted from.<br>
+</li><li>The Head, Sector, and Cylinder where the partition starts.<br>
+</li><li>The Head, Sector, and Cylinder where the partition ends.<br>
+</li><li>The operating system that owns it.<br>
+</li><li>The number of sectors that are before this partition.<br>
+</li><li>The length of the partition in sectors.<br>
+</li></ul>
+
+Now the astute reader may say: "Wait a minute!  On my machine I run DOS/Windows
+and OS/2.  I have 5 DOS partitions.  How can this be!"</p><p>
+
+Microsoft's solution to this problem was to invent the "Extended DOS" 
+partition.  If you go into FDISK, you will see that you have a "Primary" DOS
+partition, and an "Extended" DOS partition (Plus whatever else you have).
+You can also type in "UNFORMAT /PARTN /L" to get a list of all of your partitions.
+This clearly shows the chain format used. </p><p>
+
+
+
+</p><h2><hr align="Center" width="400">
+<a name="Fig_1">Figure 1</a></h2><a name="Fig_1">
+
+<center>
+<table border="" cellpadding="10" width="50%">
+<tbody><tr align="CENTER">
+ <td></td><td colspan="3"> Start </td><td></td><td colspan="3"> End </td>
+</tr>
+<tr align="CENTER"> 
+ <td>BI</td>
+ <td>H</td><td>S</td><td>C</td>
+ <td>SI</td>
+ <td>H</td><td>S</td><td>C</td>
+ <td colspan="4">SB</td><td colspan="4">NS</td>
+</tr>
+<tr align="CENTER">
+ <td>0h</td><td>1h</td><td>2h</td><td>3h</td><td>4h</td><td>5h</td><td>6h</td><td>7h</td>
+ <td>8h</td><td>9h</td><td>Ah</td><td>Bh</td><td>Ch</td><td>Dh</td><td>Eh</td><td>Fh</td>
+</tr>
+</tbody></table>
+</center>
+
+This is repeated four times (one for each partition).  Offsets are:
+1BEh, 1CEh, 1DEh, and 1EEh.  At offset 1FEh, AA55h signifies that the disk
+is bootable.  The BIOS reads it in and executes it. See my article on <strong>
+</strong></a>.<br>
+
+<h3>Key:</h3>
+<ul>
+  BI: Boot indication.  0 = Not booted from.  80h = Booted from. <br>
+  H: Head.  Starting/Ending head number for the partition. <br>
+  S: Sector.  Starting/Ending sector number for the partition.  This field
+     also holds bits 8 and 9 of the cylinder in standard DOS format. <br>
+  C: Cylinder.  Lower 8 bits of the Starting/Ending cylinder number for 
+     the partition. <br>
+  SI: System Indicator:
+  <ul>
+    00h = Unused                            <br>
+    01h = DOS 12 bit FAT (0 - 16 megs)      <br>
+    02h = XENIX root file system            <br>
+    03h = XENIX /usr file system (obsolete) <br>
+    04h = DOS 16 bit FAT (16 - 32 megs)     <br>
+    05h = Extended DOS partition            <br>
+    06h = DOS 16 bit FAT (32 megs and up)   <br>
+    07h = OS/2 High Performance File System <br>
+    07h = Windows NT (NTFS)                 <br>
+    07h = Advanced Unix                     <br>
+    0Ah = OS/2 Boot Manager                 <br>
+    <li>For more, consult Ralf Brown's Interrupt list: INT 19 <br>
+  </li></ul>
+  SB (DWORD): Number of sectors before this partition. <br> 
+  NS (DWORD): Number of sectors in this partition. <br>
+</ul>
+
+<br><h5><hr><li>
+Created by <i><a href="mailto:sabre@teleport.com">Chris Lattner</a></i></li></h5>
+
+</body></html>
