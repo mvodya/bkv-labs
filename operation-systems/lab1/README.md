@@ -16,6 +16,10 @@
 * [Типы файловых систем](filesystems.md)
 * [Как выглядит MBR](os-partitions.md)
 
+## Пример работы
+
+![screenshot](screenshot.png)
+
 ## ПРЕДУПРЕЖДЕНИЕ
 
 **Программа работает только под Linux.**
