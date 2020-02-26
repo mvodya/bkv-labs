@@ -1,6 +1,6 @@
 // Operation systems
 // Lab 2 A
-// by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova, Danil Maltsev
+// by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova
 
 #include <fcntl.h>
 #include <stdio.h>
