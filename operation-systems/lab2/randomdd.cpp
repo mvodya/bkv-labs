@@ -1,6 +1,6 @@
 // Operation systems
 // Lab 2 A
-// by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova
+// by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova, ☜(ﾟヮﾟ☜)
 
 #include <fcntl.h>
 #include <stdio.h>
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
   char sector[SECTOR_SIZE];
 
   // Перебираем все сектора
-  for (int i = 0; i < size; i += 1) {
+  for (int i = 0; i < size; i++) {
     // С вероятностью 1/2 заполняем сектор рандомом :3
     if (rand() % 2) {
       // Устанавливаем указатель на начало сектора
@@ -70,5 +70,6 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  close(fd);
   return 0;
 }
