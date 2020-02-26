@@ -66,5 +66,6 @@ int main(int argc, char* argv[]) {
   for(int i = 0; i < 4; i++)
   read_part(i);
 
+  close(fd);
   return 0;
 }
