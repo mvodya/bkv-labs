@@ -50,6 +50,12 @@ int main(int argc, char *argv[]) {
   // Вытаскиваем размер файла (в байтах) и переводим в кол-во секторов
   int size = fdstat.st_size / SECTOR_SIZE;
 
+  // Проверка кратности размера и количества секторов
+  if (fdstat.st_size % SECTOR_SIZE) {
+    printf("Err. Not valid sector size.\n");
+    return -1;
+  }
+
   // Буффер рандомного сектора
   char sector[SECTOR_SIZE];
 
