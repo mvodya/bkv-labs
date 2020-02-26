@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <ctime>
 
 // Размер сектора (в байтах)
 #define SECTOR_SIZE 512
@@ -28,7 +29,7 @@ void randsector(char sector[], int c) {
 
 int main(int argc, char *argv[]) {
   // Устанавливаем семя для рандомного генератора
-  srand(1);
+  srand(time(0));
 
   // Требуем аргументы
   if (argc < 2) {
