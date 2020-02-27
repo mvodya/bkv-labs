@@ -6,6 +6,8 @@
 
 ![sceenshot](screenshot.png)
 
+[код со скриншота](https://git.frogling.com/mvodya/bkv-labs/snippets/6)
+
 ## Как установить?
 
 [Скачайте установщик](emu8086v408r.exe) и установите программу. После этого активируйте ее следующим ключем:
