@@ -3,9 +3,6 @@
 ; by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova
 org 100h
 
-; base for number
-base db 10
-
 
 start:
 ; INPUT
@@ -58,3 +55,6 @@ jmp etp
 
 ;         0    1   2    3    4    5    6    7   8    9    A    B    C    D    E    F
 digits db 3FH, 6h, 5bh, 4fh, 66h, 6dh, 7dh, 7h, 7fh, 6fh, 77h, 7ch, 39h, 5eh, 79h, 71h
+
+; base for number
+base db 10
