@@ -1,13 +1,13 @@
+; Task8 for computer architecture subject
+; Hofstadter sequence
 ; by Mark Vodyanitskiy, Elena Bova
+
 ; Q(n) = Q(n - Q(n - 1)) + Q(n - Q(n - 2)), n > 2
 ;                  B                 A
 
 ; 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15  16  17  18  19
-; 1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 6, 8, 8, 8, 10, 9, 10, 11, 11, 12
-; A  B  v  v  v  v  v  v  v  x   !
-; 1  1  x                    7
-; 1, 1, 2, 3, 3, 4, 5, 5, 6, 6, 6, 8, 8, 8, 10, 9, 10,
-; 1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16  17
+; 1  1  2  3  3  4  5  5  6  6  6  8  8  8  10  9  10  11  11  12
+
 
 section .text
 global qnumbers
@@ -27,7 +27,7 @@ qloop:
   inc rsi
   cmp rsi, 3000040
   jne qloop
-  
+
   ret
 
 qcalc:
