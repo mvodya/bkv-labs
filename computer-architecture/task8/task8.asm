@@ -11,7 +11,7 @@
 
 section .text
 global qnumbers
-extern n 
+extern digits
 
 qnumbers:
   mov rsi, dword 2
@@ -25,13 +25,9 @@ qloop:
   mov [rax], rcx  
 
   inc rsi
-  cmp rsi, 19
-  je qloop_exit
-  jmp qloop
-
-qloop_exit:
-  mov rbx, n
-  mov [rbx], rcx
+  cmp rsi, 3000040
+  jne qloop
+  
   ret
 
 qcalc:
@@ -78,7 +74,7 @@ qgetpointer:
   ; output: rax - pointer to digits
   push rsi
   push rbx
-  mov rsi, s
+  mov rsi, digits
   mov rbx, dword 8
   mul rbx
   add rax, rsi
@@ -88,6 +84,6 @@ qgetpointer:
   ret
 
 section .data
-s: dq 1, 1
-digits: times 3000040 dq 0
+;s: dq 1, 1
+;digits: times 3000040 dq 0
 ;nums for calculating and output
