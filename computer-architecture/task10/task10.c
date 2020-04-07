@@ -1,4 +1,4 @@
-// Task9 for computer architecture subject
+// Task10 for computer architecture subject
 // Alarm clock
 // by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova, Danil Maltsev
 #include <stdio.h>
