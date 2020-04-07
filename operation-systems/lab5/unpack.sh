@@ -5,16 +5,19 @@
 # by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova, Danil Maltsev
 
 function unpack_dir_part {
-  mkdir "$1"
-  mv "$2" "$1"
+  mkdir -p "$1"
+  cp "$2" "$1"
   cd "$1"
   eval $3
-  if [ $? -eq 0 ]
+  last_err=$?
+  if [ $last_err -eq 0 ]
   then
-    rm "$2";
+    rm "$2"
+    rm "../$2"
     unpack_dir
   fi
   cd ..
+  return $last_err
 }
 
 function unpack_dir {
@@ -107,7 +110,13 @@ function unpack_dir {
         #####################################################
         *.rar)
           dir=`basename "$i" .rar`
-          unpack_dir_part "$dir" "$i" "unrar x \"$i\" &>/dev/null"
+          unpack_dir_part "$dir" "$i" "unrar x -o+ \"$i\" &>/dev/null"
+          if [ $? -eq 3 ]
+          then
+            mv "$i" "${dir}_copy.rar"
+            i="${dir}_copy.rar"
+            unpack_dir_part "$dir" "$i" "unrar x -o+ \"$i\" &>/dev/null"
+          fi
           ;;  
       esac
     fi
