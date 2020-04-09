@@ -32,6 +32,7 @@ Alarm:
   out dx, al     ; указываем регистр секунд
   inc dx         ; переходим к порту данных
   in al, dx      ; прочитаем секунды
+  call bcd2bin
   mov [sec], al  ; сохраним секунды в переменную
 
   dec dx         ; порт идекса RTC
@@ -39,6 +40,7 @@ Alarm:
   out dx, al     ; указываем регистр минут
   inc dx         ; переходим к порту данных
   in al, dx      ; прочитаем минуты
+  call bcd2bin
   mov [min], al  ; сохраним минуты в переменную
 
   dec dx         ; порт идекса RTC
@@ -46,6 +48,7 @@ Alarm:
   out dx, al     ; указываем регистр часов
   inc dx         ; переходим к порту данных
   in al, dx      ; прочитаем часы
+  call bcd2bin
   mov [hour], al ; сохраним часы в переменную
 
   ; Сложение секунд
@@ -106,10 +109,19 @@ waiter_loop:
   inc dx         ; переходим к порту данных
   in al, dx      ; прочитаем регистр C
   and al, 20h    ; получаем 5-ый бит 
-  je waiter_loop ; сравниваем с нулем
+  ;je waiter_loop ; сравниваем с нулем !!! ВРЕМЕННО ОТКЛЮЧЕНО
 
   ; Будильник сработал
   
+  ; Выключение будильника
+  dec dx         ; порт идекса RTC
+  mov al, 0Bh
+  out dx, al     ; указываем регистр B
+  inc dx         ; переходим к порту данных
+  in al, dx      ; прочитаем регистр B
+  and al, 0DFh   ; устанавливаем 5-ой бит
+  out dx, al     ; записываем
+
   pop rsi
   pop rcx
   pop rbx
@@ -165,3 +177,29 @@ unblock_cycle_upd:
   pop rdx
   pop rax
   ret
+
+
+
+bcd2bin:
+  push rbx
+  push rcx
+  push rdx
+
+  mov bl, al
+
+  ; masking
+  and bl, 0Fh
+  and al, 0F0h
+
+  mov cl, 4
+  ror byte al, cl ; циклическое смещение вправо
+  mov dl, 0Ah
+  mul dl
+  add al, bl
+  ; al - ответ
+
+  pop rdx
+  pop rcx
+  pop rbx
+  ret
+  
