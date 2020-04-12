@@ -18,7 +18,8 @@ section .text
 global Alarm
 
 
-
+; ============================================= ;
+;           Подпрограмма БУДИЛЬНИК              ;
 Alarm:
   push rax
   push rbx
@@ -54,16 +55,19 @@ Alarm:
   ; Сложение секунд
   mov al, [sec] 
   add al, [secz] 
+  call bin2bcd
   mov [secA], al
 
   ; Сложение минут
   mov al, [min]
   add al, [minz]
+  call bin2bcd
   mov [minA], al
 
   ; Сложение часов
   mov al, [hour]
   add al, [hourz]
+  call bin2bcd
   mov [hourA], al
 
   ; Запись секунд в будильник 
@@ -129,7 +133,8 @@ waiter_loop:
   ret
 
 
-
+; ============================================= ;
+;  Функция безопасной блокировки обновления RTC ;
 block_cycle_upd:
   push rax
   push rdx
@@ -160,7 +165,8 @@ bcu_loop:
   ret
 
 
-
+; ============================================= ;
+;      Функция разблокировки обновления RTC     ;
 unblock_cycle_upd:
   push rax
   push rdx
@@ -179,27 +185,67 @@ unblock_cycle_upd:
   ret
 
 
-
+; ============================================= ;
+;     Перевод из BCD в обычный бинарный вид     ;
 bcd2bin:
   push rbx
   push rcx
   push rdx
 
   mov bl, al
-
-  ; masking
-  and bl, 0Fh
-  and al, 0F0h
-
+  and bl, 0Fh    ; masking
+  and al, 0F0h   ; masking
   mov cl, 4
-  ror byte al, cl ; циклическое смещение вправо
+  ror byte al, cl; циклическое смещение вправо
   mov dl, 0Ah
   mul dl
   add al, bl
+  
   ; al - ответ
-
   pop rdx
   pop rcx
   pop rbx
   ret
-  
+
+
+; ============================================= ;
+;        Перевод из бинарного вида в BCD        ;
+; алгоритм: https://my.eng.utah.edu/~nmcdonal/Tutorials/BCDTutorial/BCDConversion.html
+bin2bcd:
+    push rbx
+    push rcx
+    mov cx, 8
+bin2bcd_loop:    ; перебор 8 раз
+    rol ax, 1
+    rol bx, 1
+    ; если в ah есть 1, переносим в bl
+    cmp ah, 0
+    jnz bin2bcd_step
+bin2bcd_full_continue:
+    ; проверяем первые 4 бита bl, если >= 5, добавим 3
+    push rbx
+    and bl, 0Fh
+    cmp bl, 4
+    pop rbx
+    ja bin2bcd_frap
+    ; продолжение цикла
+bin2bcd_continue:
+    loop bin2bcd_loop
+    ; конец перевода
+    mov al, bl
+    pop rcx
+    pop rbx
+    ret
+    ; перенос бита в bl из ah
+bin2bcd_step:
+    xor ah, ah
+    or bl, 1
+    jmp bin2bcd_full_continue
+    ; добавляем 3 для числа bl >= 5
+bin2bcd_frap:
+    cmp cx, 1    ; принудительный break
+    je bin2bcd_continue
+    inc bl
+    inc bl
+    inc bl
+    jmp bin2bcd_continue

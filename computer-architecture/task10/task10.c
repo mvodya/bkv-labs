@@ -17,13 +17,13 @@ int main()
   }
   
   scanf("%x%x%x", &hourz, &minz, &secz);
-  printf("Вы ввели %02x:%02x:%02x\n", hourz, minz, secz);
+  printf("Вы ввели      [HEX]: %02x:%02x:%02x\n", hourz, minz, secz);
   fflush(stdout);
 
   Alarm ();
   printf ("ALARM!!!\n");
-  printf ("Текущее время: %02x:%02x:%02x\n",hour,min,sec);
-  printf ("Будильник    : %02x:%02x:%02x\n",hourA,minA,secA);
+  printf ("Текущее время [HEX]: %02x:%02x:%02x\n",hour,min,sec);
+  printf ("Будильник     [BCD]: %02x:%02x:%02x\n",hourA,minA,secA);
   ioperm(0x70, 2, 0);
   
   return 0;
