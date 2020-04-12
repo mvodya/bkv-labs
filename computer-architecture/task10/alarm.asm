@@ -54,13 +54,27 @@ Alarm:
 
   ; Сложение секунд
   mov al, [sec] 
-  add al, [secz] 
+  add al, [secz]
+  cmp al, 60     ; если больше 60, переносим 1
+  jnae sum_sec_ok
+  sub al, 60
+  mov cx, [minz]
+  inc cx
+  mov [minz], cx
+sum_sec_ok:
   call bin2bcd
   mov [secA], al
 
   ; Сложение минут
   mov al, [min]
   add al, [minz]
+  cmp al, 60     ; если больше 60, переносим 1
+  jnae sum_min_ok
+  sub al, 60
+  mov cx, [hourz]
+  inc cx
+  mov [hourz], cx
+sum_min_ok:
   call bin2bcd
   mov [minA], al
 
@@ -113,7 +127,7 @@ waiter_loop:
   inc dx         ; переходим к порту данных
   in al, dx      ; прочитаем регистр C
   and al, 20h    ; получаем 5-ый бит 
-  ;je waiter_loop ; сравниваем с нулем !!! ВРЕМЕННО ОТКЛЮЧЕНО
+  je waiter_loop ; сравниваем с нулем
 
   ; Будильник сработал
   
@@ -200,7 +214,7 @@ bcd2bin:
   mov dl, 0Ah
   mul dl
   add al, bl
-  
+
   ; al - ответ
   pop rdx
   pop rcx
