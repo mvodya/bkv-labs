@@ -1,4 +1,4 @@
-// Lab3 for operation system subject
+// Lab4 for operation system subject
 // Modes for servicing short-term planning queues
 // by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova, Danil Maltsev
 
