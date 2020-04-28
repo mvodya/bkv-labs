@@ -5,7 +5,7 @@
 section .data
 global HARM
 global SINE
-global N
+;global N
 ANGLE	DW 	0
 ;K4	DW 	4
 MULTIP	DW 	200
@@ -34,21 +34,21 @@ calcul:FSAVE [saved]
     mov rcx, 361
     mov rdi, SINE
     rep  stosd
-    mov world [ANGLE], 0
+    mov word [ANGLE], 0
 DOIT:
 	MOV 	ESI, 0		; SI должен указывать на SINE
 NXTPT:	MOV 	word [TEMP1], 01H
-ADMORE:	MOVB 	AX, [ANGLE]	; Текущий угол в AX
+ADMORE:	MOV 	AX, [ANGLE]	; Текущий угол в AX
 	MOV 	DX, [TEMP1]
 	SHL 	DX,1		; Умн. на 2
 	SUB 	DX,1		; вычесть 1
 	MOV 	word [TEMP2], DX	; Сохранить к-т гармоники k=1/(2*N-1)
 	MUL 	word [TEMP2]		; и умножить на угол. kwt.
-	DIV 	word [REDUC]
+	DIV 	word [REDUCE]
 	MOV 	[TEMP3], DX
-	FINI    		; Инициализация сопроцессора 
-	FILD 	RADAN
-	FLDP
+	FINIT    		; Инициализация сопроцессора
+	FILD 	word [RADIAN]
+	FLDPI
 	FDIV	ST0, ST1	; Получим что-то около .0174..
 	FILD    word	[TEMP3]
 	FMULP			; Переведем угол в радианы
@@ -59,16 +59,16 @@ POSSIG:	FIDIV 	word [TEMP2]	; Разделить на коэффициент г�
 ;>>>>>>>>>>>>>>>>>>>>>>> sin(wt) + 1/3 sin (3wt) + 1/5 sin (5wt) +...
 ;
 	FADD 	dword [SINE + ESI]
-	FSTP 	dword [SINE + EDI]
+	FSTP 	dword [SINE + ESI]
 	FWAIT			; Для целей синхронизации
 	INC 	word [TEMP1]	; Подготовимся сделать то же для высших гармоник
-	MOVB 	CX,  [HARM]
-	CMP 	TEMP1, CX
+	MOV 	CX,  [HARM]
+	CMP 	[TEMP1], CX
 	JG  	IDXPOS		; Переходим к следующему углу?
 	JMP 	ADMORE
 IDXPOS:	ADD 	ESI, 04H
 	INC  word  [ANGLE]		; Переходим к следующему углу или
-	CMP  word  [ANGLE], 360H	; Пора завершать работу?
+	CMP  word  [ANGLE], 360	; Пора завершать работу?
 	jg  	TRANS
 	JMP 	NXTPT
 ;******************************************************************
@@ -79,8 +79,8 @@ TRANS:			; завешение
        pop rsi
        pop rdx
        pop rcx
-       pop rax
        pop rbx
+       pop rax
        FRSTOR [saved]
 ret
 
