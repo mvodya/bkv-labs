@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
    
     w->labelsize(24);
     w->labelcolor((Fl_Color)1);
-    { coeff = new Fl_Input(30, 20, 215, 40, "coefficient (k) при sin(kx)");
+    { coeff = new Fl_Input(30, 20, 215, 40, "coefficient (k) при cos(kx)");
       coeff->tooltip("Формула для вычисления коэффициентов");
       coeff->callback((Fl_Callback*)cb_coeff);
       coeff->align(Fl_Align(FL_ALIGN_TOP));
@@ -166,8 +166,8 @@ int main(int argc, char **argv) {
       info->callback((Fl_Callback*)cb_info);
       Fl_Text_Buffer *tbuff = new Fl_Text_Buffer();        // text buffer
    info->buffer(tbuff);
-   tbuff->text("Ряд Фурье\nдля прямоугольного \nимпульса \n"
-               "sin(x) + 1/3*sin(3*x)\n      + 1/5*sin(5*x)\n      + 1/7*sin(7*x)+...\n");
+   tbuff->text("Ряд Фурье\nдля треугольного \nимпульса \n"
+               "cos(x) + 1/3^2 * cos(3*x)\n      + 1/5^2 *cos(5*x)\n      + 1/7^2 * cos(7*x)+...\n");
       
     } // Fl_Text_Display* info
 
