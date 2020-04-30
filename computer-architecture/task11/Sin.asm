@@ -13,8 +13,9 @@ RADIAN DW 180
 REDUCE DW 360
 ANGLE DW 0
 TEMP1 DW 0
-TEMP2 DW 0
+TEMP2 DW -1
 TEMP3 DW 0
+TEMP4 DW 0
 HARM DW 0
 
 SINE times 361 DD 0           ; Массив вещественных чисел
@@ -37,6 +38,7 @@ calcul:
   mov rdi, SINE
   rep stosd
   mov word [ANGLE], 0
+  mov word [TEMP2], -1
 
 DOIT:
   MOV ESI, 0                  ; SI должен указывать на SINE
@@ -45,18 +47,28 @@ NXTPT:
   MOV word [TEMP1], 01H
 
 ADMORE:
+  ;MOV AX, [ANGLE]             ; Текущий угол в AX
+  ;MOV DX, [TEMP1]             ; temp1 -> n
+
+  MOV AX, word [TEMP2]
+  NEG word AX
+  MOV word [TEMP2], AX
+
   MOV AX, [ANGLE]             ; Текущий угол в AX
-  MOV DX, [TEMP1]
-  SHL DX, 1                   ; Умн. на 2
-  SUB DX, 1                   ; Вычесть 1
-  PUSH AX
-  PUSH DX
-  MOV AX, DX
-  MUL word DX
-  POP DX
-  MOV word [TEMP2], AX        ; Сохранить к-т гармоники k=1/(2*N-1)
-  POP AX
-  MUL word DX                 ; и умножить на угол. kwt.
+
+  ;MOV AX, [ANGLE]             ; Текущий угол в AX
+  ;SHL DX, 1                  ; Умн. на 2 !
+  ;SUB DX, 1                  ; Вычесть 1 !
+    ;PUSH AX
+    ;PUSH DX
+    ;MOV AX, DX
+    ;MUL word DX
+    ;POP DX
+    ;MOV word [TEMP2], AX        ; Сохранить к-т гармоники k=1/(2*N-1)
+    ;MOV word [TEMP2], DX
+    ;POP AX
+  BREAK:
+  MUL word [TEMP1]                 ; и умножить на угол. kwt.
   DIV word [REDUCE]
   MOV [TEMP3], DX
   FINIT                       ; Инициализация сопроцессора
@@ -65,15 +77,25 @@ ADMORE:
   FDIV ST0, ST1               ; Получим что-то около .0174..
   FILD word [TEMP3]
   FMULP                       ; Переведем угол в радианы
-  FCOS
+  FSIN                        ; sin
 
 POSSIG:
-  FIDIV word [TEMP2]          ; Разделить на коэффициент гармоники
-
+  FIDIV word [TEMP1]          ; Разделить на коэффициент гармоники
+  
 ; Формула:
 ;         cos(wt) + 1/3 cos (3wt) + 1/5 cos (5wt) + ...
-
+;         sin(wt) - 1/2 sin (2wt) + 1/3 sin(3wt) - ...
+  
+  mov BX, word [HARM]
+  test word BX, 1
+  jne s1
+  FIMUL word [TEMP2]
   FADD dword [SINE + ESI]
+  jmp s2
+  s1:
+  FSUB dword [SINE + ESI]
+  s2:
+
   FSTP dword [SINE + ESI]
   FWAIT                       ; Для целей синхронизации
   INC word [TEMP1]            ; Подготовимся сделать то же для высших гармоник
