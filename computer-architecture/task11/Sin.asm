@@ -15,7 +15,6 @@ ANGLE DW 0
 TEMP1 DW 0
 TEMP2 DW -1
 TEMP3 DW 0
-TEMP4 DW 0
 HARM DW 0
 
 SINE times 361 DD 0           ; Массив вещественных чисел
@@ -47,28 +46,11 @@ NXTPT:
   MOV word [TEMP1], 01H
 
 ADMORE:
-  ;MOV AX, [ANGLE]             ; Текущий угол в AX
-  ;MOV DX, [TEMP1]             ; temp1 -> n
-
-  MOV AX, word [TEMP2]
+  MOV AX, word [TEMP2]        ; изменяем знак для чередования
   NEG word AX
   MOV word [TEMP2], AX
-
   MOV AX, [ANGLE]             ; Текущий угол в AX
-
-  ;MOV AX, [ANGLE]             ; Текущий угол в AX
-  ;SHL DX, 1                  ; Умн. на 2 !
-  ;SUB DX, 1                  ; Вычесть 1 !
-    ;PUSH AX
-    ;PUSH DX
-    ;MOV AX, DX
-    ;MUL word DX
-    ;POP DX
-    ;MOV word [TEMP2], AX        ; Сохранить к-т гармоники k=1/(2*N-1)
-    ;MOV word [TEMP2], DX
-    ;POP AX
-  BREAK:
-  MUL word [TEMP1]                 ; и умножить на угол. kwt.
+  MUL word [TEMP1]            ; и умножить на угол. kwt.
   DIV word [REDUCE]
   MOV [TEMP3], DX
   FINIT                       ; Инициализация сопроцессора
@@ -83,19 +65,20 @@ POSSIG:
   FIDIV word [TEMP1]          ; Разделить на коэффициент гармоники
   
 ; Формула:
-;         cos(wt) + 1/3 cos (3wt) + 1/5 cos (5wt) + ...
-;         sin(wt) - 1/2 sin (2wt) + 1/3 sin(3wt) - ...
+;         cos(wt) + 1/3 cos (3wt) + 1/5 cos (5wt) + ... (для треугольника)
+;         sin(wt) - 1/2 sin (2wt) + 1/3 sin(3wt) - ... (Для пилы)
   
   mov BX, word [HARM]
-  test word BX, 1
-  jne s1
+  test word BX, 1             ; при четных и нечетных получается по-разному
+  jne s1                      ; проверка на четность
   FIMUL word [TEMP2]
   FADD dword [SINE + ESI]
-  jmp s2
-  s1:
+  jmp s2                      ; Переходим если число четное
+  
+s1:
   FSUB dword [SINE + ESI]
-  s2:
-
+  
+s2:
   FSTP dword [SINE + ESI]
   FWAIT                       ; Для целей синхронизации
   INC word [TEMP1]            ; Подготовимся сделать то же для высших гармоник

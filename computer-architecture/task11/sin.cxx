@@ -166,8 +166,8 @@ int main(int argc, char **argv) {
       info->callback((Fl_Callback*)cb_info);
       Fl_Text_Buffer *tbuff = new Fl_Text_Buffer();        // text buffer
    info->buffer(tbuff);
-   tbuff->text("Ряд Фурье\nдля треугольного \nимпульса \n"
-               "cos(x) + 1/3^2 * cos(3*x)\n      + 1/5^2 *cos(5*x)\n      + 1/7^2 * cos(7*x)+...\n");
+   tbuff->text("Ряд Фурье\nдля пилы\n"
+               "sin(x) - 1/2 * sin(2*x)\n      + 1/3 *sin(3*x)\n      - 1/4 * sin(4*x)+...\n");
       
     } // Fl_Text_Display* info
 
