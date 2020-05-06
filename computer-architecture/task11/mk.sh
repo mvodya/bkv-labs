@@ -1,3 +1,5 @@
+#!/bin/bash
+
 [ -f Cartesian.o ] || g++ -c Cartesian.cpp
 nasm -felf64 Sin.asm
 if [ $? -eq 0 ]
