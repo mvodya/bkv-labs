@@ -28,6 +28,6 @@ for dir in *; do
      #cat passwd | cut -d: -f1 >> ../passwdcmp
 
      cd ..
-     echo ""
+     printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
   fi
 done  
