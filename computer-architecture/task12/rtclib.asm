@@ -181,7 +181,7 @@
 ; Включение будильника
 %macro RTC_ALARM_ON 0
   RTC_READ_REGISTER 0Bh, bl
-  and bl, 20h                 ; устанавливаем 5-ой бит
+  or al, 20h                 ; устанавливаем 5-ой бит
   RTC_WRITE_REGISTER 0Bh, bl
 %endmacro
 
