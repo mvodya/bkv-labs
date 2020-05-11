@@ -22,7 +22,7 @@ int main()
 
   Alarm ();
   printf ("ALARM!!!\n");
-  printf ("Текущее время [HEX]: %02x:%02x:%02x\n",hour,min,sec);
+  printf ("Время старта  [HEX]: %02x:%02x:%02x\n",hour,min,sec);
   printf ("Будильник     [BCD]: %02x:%02x:%02x\n",hourA,minA,secA);
   ioperm(0x70, 2, 0);
   
