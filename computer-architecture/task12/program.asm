@@ -1,3 +1,6 @@
+; Task12 for computer architecture subject
+; Alarm clock v3
+; by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova, Danil Maltsev
 
 section .data
 

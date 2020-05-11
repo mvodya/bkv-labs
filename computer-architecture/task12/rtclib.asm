@@ -1,3 +1,7 @@
+; Task12 for computer architecture subject
+; Alarm clock v3
+; by Mark Vodyanitskiy, Arkadiy Shneider, Elena Bova, Danil Maltsev
+
 ; Читаем регистр из RTC
 ; [RTC register], [destination]
 %macro RTC_READ_REGISTER 2
