@@ -1,10 +1,12 @@
 #include <iomanip>
 #include <iostream>
 
+#define FOR_I_J(n) for (int i = 0; i < n; i++) for (int j = 0; j < n; j++)
+
 using namespace std;
 
 typedef float T;
-const int N = 4;
+const int N = 10;
 const int SEED = 1;
 
 inline T** alloc_matrix(int n) {
@@ -20,7 +22,7 @@ inline void dealloc_matrix(T** M, int n) {
 
 void print_matrix(T** M, int n) {
   for (int i = 0; i < n; i++) {
-    for (int j = 0; j < n; j++) cout << setw(5) << M[i][j];
+    for (int j = 0; j < n; j++) cout << setw(8) << std::setprecision(2) << M[i][j];
     cout << endl;
   }
 }
@@ -63,20 +65,14 @@ inline int adj_minor(T** M, int n, int mi, int mj) {
 
 T** adjugate_matrix(T** M, int n) {
   T** C = alloc_matrix(n);
-  for (int i = 0; i < n; i++)
-    for (int j = 0; j < n; j++)
-      C[i][j] = adj_add(M, n, j, i);
-  print_matrix(C, n);
-  cout << endl;
+  FOR_I_J(n) C[i][j] = adj_add(M, n, j, i);
   return C;
 }
 
 T** invertable_matrix(T** M, int n) {
   int d = determinant(M, n);
   T** A = adjugate_matrix(M, n);
-  for (int i = 0; i < n; i++)
-    for (int j = 0; j < n; j++)
-      A[i][j] /= d;
+  FOR_I_J(n) A[i][j] /= d;
   return A;
 }
 
@@ -85,8 +81,7 @@ int main() {
 
   T** matrix = alloc_matrix(N);
 
-  for (int i = 0; i < N; i++)
-    for (int j = 0; j < N; j++) matrix[i][j] = rand() % 10;
+  FOR_I_J(N) matrix[i][j] = rand() % 10;
 
   cout << "Source matrix: \n";
   print_matrix(matrix, N);
