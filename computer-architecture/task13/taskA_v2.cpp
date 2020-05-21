@@ -1,6 +1,11 @@
+// Task13 for computer architecture subject
+// Invertable matrix (with multi threading, without simd)
+// by Mark Vodyanitskiy, Elena Bova, Danil Maltsev, Arkadiy Shneider
 #include <iomanip>
 #include <iostream>
 #include <thread>
+#include <vector>
+#include <algorithm>
 
 #define FOR_I_J(n) for (int i = 0; i < n; i++) for (int j = 0; j < n; j++)
 
@@ -64,41 +69,20 @@ inline int adj_minor(T** M, int n, int mi, int mj) {
   return d;
 }
 
-void tv2() {
-  cout << "test2";
-}
+vector<thread> pool;
 
 T** adjugate_matrix(T** M, int n) {
   T** C = alloc_matrix(n);
 
-  thread t1([n, C, M](){
-    for (int i = 0; i < n/2; i++)
-      for (int j = 0; j < n/2; j++)
+  for (int i = 0; i < n; i++)
+    pool.push_back(thread([i, n, C, M]() { 
+      for (int j = 0; j < n; j++)
         C[i][j] = adj_add(M, n, j, i);
-  });
+    }));
 
-  thread t2([n, C, M](){
-    for (int i = 0; i < n/2; i++)
-      for (int j = n/2; j < n; j++)
-        C[i][j] = adj_add(M, n, j, i);
+  for_each (pool.begin(), pool.end(), [](thread &t) {
+      t.join();
   });
-
-  thread t3([n, C, M](){
-  for (int i = n/2; i < n; i++)
-    for (int j = 0; j < n/2; j++)
-      C[i][j] = adj_add(M, n, j, i);
-  });
-
-  thread t4([n, C, M](){
-    for (int i = n/2; i < n; i++)
-      for (int j = n/2; j < n; j++)
-        C[i][j] = adj_add(M, n, j, i);
-  });
-
-  t1.join();
-  t2.join();
-  t3.join();
-  t4.join();
 
   return C;
 }
