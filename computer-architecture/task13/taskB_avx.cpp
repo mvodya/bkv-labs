@@ -10,7 +10,11 @@ using namespace std;
 
 typedef float T;
 
+#ifdef MATRIX_SIZE
+const int N = MATRIX_SIZE;
+#else
 const int N = 16;
+#endif
 const int SEED = 1;
 
 inline T** alloc_matrix(int n, int m) {
