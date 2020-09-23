@@ -19,10 +19,8 @@
 
 * Архитектура ЭВМ
 * Папка: [computer-architecture](computer-architecture)
-* ... в процессе
 
 2:
 
 * Операционные системы
 * Папка: [operation-systems](operation-systems)
-* ... в процессе
